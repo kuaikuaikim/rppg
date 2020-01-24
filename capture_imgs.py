@@ -18,11 +18,11 @@ class CaptureImgs():
         self.stop = False
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.model = LinkNet34()
-        self.model.load_state_dict(torch.load('linknet.pth'))
+        self.model.load_state_dict(torch.load('linknet.pth', map_location=torch.device('cpu')))
         self.model.eval()
         self.model.to(self.device)
         self.show_mask = show_mask
-        self.save_root = "/data2/datasets/"
+        self.save_root = "/fdata/datasets/"
 
     def __call__(self, pipe, source):
         self.pipe = pipe

@@ -26,8 +26,8 @@ class ProcessMasks():
         self.pulse = Pulse(fs, sz, bs, size)
         self.hrs = []
         self.save_key = save_key
-        self.save_root = '/data2/datasets/'
-        self.save_results = False
+        self.save_root = '/fdata/datasets/'
+        self.save_results = True
 
     def __call__(self, pipe, plot_pipe, source):
         self.pipe = pipe
@@ -96,6 +96,7 @@ class ProcessMasks():
             else:
                 self.signal[signal_extracted: signal_extracted + mean.shape[0]] = mean
             signal_extracted+=mean.shape[0]
+            print(signal_extracted)
     
 
     def compute_mean(self):
@@ -105,7 +106,7 @@ class ProcessMasks():
             if len(self.masked_batches) == 0:
                 time.sleep(0.01)
                 continue
-            
+
             mask = self.masked_batches.pop(0)     
             if batch is None:
                 batch = np.zeros((self.batch_size, mask.shape[0], mask.shape[1], mask.shape[2]))

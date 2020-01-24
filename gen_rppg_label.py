@@ -5,11 +5,12 @@ import numpy as np
 import time
 import multiprocessing as mp
 from plot_cont import DynamicPlot
-from capture_imgs import CaptureImgs
+from capture_frames import CaptureFrames
 from process_mask import ProcessMasks
 
-root_dir = '/data2/datasets/'
-scan_dir = '/data2/datasets/siw_m/train_image'
+root_dir = '/fdata/datasets/'
+fft_save_dir = '/fdata/datasets/siw/train_fft/live'
+scan_dir = '/fdata/datasets/siw/Train/live'
 
 SEQ_LEN = 5
 SEQ_STRIP = 3
@@ -19,7 +20,7 @@ def key_cmp(v1):
     return d1
 
 
-class RunPOSFromImg():
+class RunPOSFromVideo():
     def __init__(self, sz=270, fs=28, bs=30, plot=False):
         self.batch_size = bs
         self.frame_rate = fs
@@ -43,7 +44,7 @@ class RunPOSFromImg():
                                     daemon=False)
         mask_processer.start()
 
-        capture = CaptureImgs(self.batch_size, source, show_mask=True)
+        capture = CaptureFrames(self.batch_size, source, show_mask=False)
         capture(mask_process_pipe, source)
 
         mask_processer.join()
@@ -59,29 +60,31 @@ if __name__ == '__main__':
     parser.add_argument('--paf_size', default=3, type=int, help='PAF feature kernel size')
     args = parser.parse_args()
 
-    siw_datasets = {}
+    runPOSVid = RunPOSFromVideo(240, 25, 30, False)
+
+
+    siw_datasets = []
+
+    save_root_key = 'siw/train_fft/live'
+
     for root, dirs, files in os.walk(scan_dir, topdown=False):
         for name in files:
-            img_class = root.split("/")[-2]
-            people_id = root.split("/")[-1]
-            class_key = img_class + '_' + people_id
-            if class_key not in siw_datasets:
-                siw_datasets[class_key] = []
-            cur_file = os.path.join(root, name)
-            cur_file = cur_file.replace("/data2/datasets/","")
-            siw_datasets[class_key].append(cur_file)
+            if name.split('.')[-1] == 'mov':
+                mov_path = os.path.join(root, name)
+                class_sess_name = name.split('.')[-2]
+                save_key = os.path.join(save_root_key, class_sess_name)
+                runPOSVid(mov_path, save_key)
 
+    # for k in siw_datasets:
+    #     sorted_dataset = sorted(siw_datasets[k], key = key_cmp)
+    #     siw_datasets[k] = sorted_dataset
 
-    for k in siw_datasets:
-        sorted_dataset = sorted(siw_datasets[k], key = key_cmp)
-        siw_datasets[k] = sorted_dataset
-
-    runPOSImg = RunPOSFromImg(240, 25, 30, True)
-
-    for k in siw_datasets:
-        tp, pe = k.split('_')
-        if tp != 'real':
-            continue
-        save_key = '/siw_m/train_fft/'
-        save_key = save_key+'/'+tp+'/'
-        runPOSImg(siw_datasets[k], save_key)
+    # runPOSImg = RunPOSFromImg(240, 25, 1, True)
+    #
+    # for k in siw_datasets:
+    #     tp, pe = k.split('_')
+    #     if tp != 'real':
+    #         continue
+    #     save_key = 'siw_v1/train_fft/'
+    #     save_key = save_key+'/'+tp+'/'
+    #     runPOSImg(siw_datasets[k], save_key)

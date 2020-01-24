@@ -17,7 +17,7 @@ class CaptureFrames():
         self.stop = False
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.model = LinkNet34()
-        self.model.load_state_dict(torch.load('linknet.pth'))
+        self.model.load_state_dict(torch.load('linknet.pth', map_location=torch.device('cpu')))
         self.model.eval()
         self.model.to(self.device)
         self.show_mask = show_mask
