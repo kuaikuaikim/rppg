@@ -8,9 +8,9 @@ from plot_cont import DynamicPlot
 from capture_frames import CaptureFrames
 from process_mask import ProcessMasks
 
-root_dir = '/fdata/datasets/'
-fft_save_dir = '/fdata/datasets/siw/train_fft/live'
-scan_dir = '/fdata/datasets/siw/Train/live'
+root_dir = '/data2/datasets_origin/'
+fft_save_dir = '/data2/datasets_origin/siw/train_fft/live'
+scan_dir = '/data2/datasets_origin/siw/Train/live'
 
 SEQ_LEN = 5
 SEQ_STRIP = 3

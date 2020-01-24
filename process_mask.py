@@ -26,7 +26,7 @@ class ProcessMasks():
         self.pulse = Pulse(fs, sz, bs, size)
         self.hrs = []
         self.save_key = save_key
-        self.save_root = '/fdata/datasets/'
+        self.save_root = '/data2/datasets_origin/'
         self.save_results = True
 
     def __call__(self, pipe, plot_pipe, source):
