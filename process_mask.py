@@ -91,7 +91,7 @@ class ProcessMasks():
                 if self.plot_pipe is not None:
                     self.plot_pipe.send('no face detected')
                 continue
-            if signal_extracted >= self.signal_size:
+            if signal_extracted >= self.signal_size and signal_extracted % 30 == 0:
                 self.process_signal(mean)
             else:
                 self.signal[signal_extracted: signal_extracted + mean.shape[0]] = mean
@@ -106,7 +106,6 @@ class ProcessMasks():
             if len(self.masked_batches) == 0:
                 time.sleep(0.01)
                 continue
-
             mask = self.masked_batches.pop(0)     
             if batch is None:
                 batch = np.zeros((self.batch_size, mask.shape[0], mask.shape[1], mask.shape[2]))
