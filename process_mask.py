@@ -7,7 +7,7 @@ from plot_cont import DynamicPlot
 from capture_frames import CaptureFrames
 import pandas as pd
 from matplotlib import pyplot as plt
-
+import os
 from utils import *
 import multiprocessing as mp
 import sys
@@ -15,7 +15,7 @@ import sys
 
 class ProcessMasks():
 
-    def __init__(self, sz=270, fs=30, bs=30, size=256):
+    def __init__(self, sz=270, fs=30, bs=30, save_key=None, size=256):
         print('init')
         self.stop = False
         self.masked_batches = []
@@ -25,6 +25,8 @@ class ProcessMasks():
         self.signal = np.zeros((sz, 3))
         self.pulse = Pulse(fs, sz, bs, size)
         self.hrs = []
+        self.save_key = save_key
+        self.save_root = '/data2/datasets/'
         self.save_results = False
 
     def __call__(self, pipe, plot_pipe, source):
@@ -140,8 +142,20 @@ class ProcessMasks():
         saves numpy array of heart rates as hrs
         saves numpy array of power spectrum as fft_spec
         """
-        np.save('hrs', np.array(self.hrs))
-        np.save('fft_spec', np.array(self.pulse.fft_spec))
+        if len(self.pulse.fft_spec) > 0:
+            if self.save_key is not None:
+                det_save_key = self.save_key
+            else:
+                det_save_key = './'
+
+            save_path = os.path.join(self.save_root, det_save_key)
+            if not os.path.exists(save_path):
+                os.makedirs(save_path)
+
+
+            fft_path = os.path.join(save_path, 'fft_spec')
+            # np.save('hrs', np.array(self.hrs))
+            np.save(fft_path, np.array(self.pulse.fft_spec))
 
     def savePlot(self, path):
         if self.save_results == False:

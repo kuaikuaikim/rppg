@@ -43,7 +43,6 @@ class RunPOS():
         if self.plot:
             self.plot_process.join()
         time2=time.time()
-        time2=time.time()
         print(f'time {time2-time1}')
 
 def get_args():
