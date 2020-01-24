@@ -76,7 +76,7 @@ if __name__ == '__main__':
         sorted_dataset = sorted(siw_datasets[k], key = key_cmp)
         siw_datasets[k] = sorted_dataset
 
-    runPOSImg = RunPOSFromImg(240, 25, 30, True)
+    runPOSImg = RunPOSFromImg(180, 25, 1, True)
 
     for k in siw_datasets:
         tp, pe = k.split('_')
