@@ -73,7 +73,11 @@ if __name__ == '__main__':
                 mov_path = os.path.join(root, name)
                 class_sess_name = name.split('.')[-2]
                 save_key = os.path.join(save_root_key, class_sess_name)
-                runPOSVid(mov_path, save_key)
+                task_processer = mp.Process(target=runPOSVid, args=(mov_path, save_key),
+                                            daemon=False)
+                task_processer.start()
+                task_processer.join()
+
 
     # for k in siw_datasets:
     #     sorted_dataset = sorted(siw_datasets[k], key = key_cmp)
