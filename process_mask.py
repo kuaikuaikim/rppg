@@ -91,7 +91,7 @@ class ProcessMasks():
                 if self.plot_pipe is not None:
                     self.plot_pipe.send('no face detected')
                 continue
-            if signal_extracted >= self.signal_size and signal_extracted % 30 == 0:
+            if signal_extracted >= self.signal_size:
                 self.process_signal(mean)
             else:
                 self.signal[signal_extracted: signal_extracted + mean.shape[0]] = mean
@@ -122,7 +122,7 @@ class ProcessMasks():
             total_pixels = batch.shape[1] * batch.shape[2]
             avg_skin_pixels = non_zero_pixels.mean()
             m = {'face_detected': True, 'mean': np.zeros((self.batch_size, 3))}
-            if (avg_skin_pixels + 1) / (total_pixels) < 0.05:
+            if (avg_skin_pixels + 1) / (total_pixels) < 0.005:
                 m['face_detected'] = False
             else:
                 m['mean'] = np.true_divide(batch.sum(axis=(1,2)), non_zero_pixels+1e-6)

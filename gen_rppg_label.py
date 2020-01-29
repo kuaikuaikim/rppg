@@ -60,24 +60,30 @@ if __name__ == '__main__':
     parser.add_argument('--paf_size', default=3, type=int, help='PAF feature kernel size')
     args = parser.parse_args()
 
-    runPOSVid = RunPOSFromVideo(240, 25, 30, False)
-
-
-    siw_datasets = []
 
     save_root_key = 'siw/train_fft/live'
 
+    task_list = []
+
     for root, dirs, files in os.walk(scan_dir, topdown=False):
         for name in files:
+            # if len(task_list) >= 8:
+            #     for t in task_list:
+            #         t.start()
+            #     for t in task_list:
+            #         t.join()
+            #     task_list.clear()
+
             if name.split('.')[-1] == 'mov':
                 mov_path = os.path.join(root, name)
                 class_sess_name = name.split('.')[-2]
                 save_key = os.path.join(save_root_key, class_sess_name)
+                runPOSVid = RunPOSFromVideo(270, 25, 30, False)
                 task_processer = mp.Process(target=runPOSVid, args=(mov_path, save_key),
                                             daemon=False)
+                # task_list.append(task_processer)
                 task_processer.start()
                 task_processer.join()
-
 
     # for k in siw_datasets:
     #     sorted_dataset = sorted(siw_datasets[k], key = key_cmp)

@@ -56,18 +56,19 @@ class Pulse():
         signal_size = len(signal)
         signal = signal.flatten()
         fft_data = np.fft.rfft(signal) # FFT
-        fft_data = np.abs(fft_data)
+        # fft_data = np.abs(fft_data)
 
         freq = np.fft.rfftfreq(signal_size, 1./self.framerate) # Frequency data
 
-        inds= np.where((freq < self.minFreq) | (freq > self.maxFreq) )[0]
-        fft_data[inds] = 0
-        bps_freq=60.0*freq
-        max_index = np.argmax(fft_data)
-        # fft_data[max_index] = fft_data[max_index]**2
-        fft_normal = np.linalg.norm(fft_data)
-        fft_data = fft_data / fft_normal
+        # inds= np.where((freq < self.minFreq) | (freq > self.maxFreq) )[0]
+        # fft_data[inds] = 0
+        # bps_freq=60.0*freq
+        # max_index = np.argmax(fft_data)
+        # # fft_data[max_index] = fft_data[max_index]**2
+        # fft_normal = np.linalg.norm(fft_data)
+        # fft_data = fft_data / fft_normal
         self.fft_spec.append(fft_data)
-        HR =  bps_freq[max_index]
-        print(" HT:{}".format(HR))
-        return HR
+        # HR =  bps_freq[max_index]
+        # print(" HT:{}".format(HR))
+        # return HR
+        return 80
