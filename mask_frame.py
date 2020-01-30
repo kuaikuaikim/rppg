@@ -18,7 +18,7 @@ class MaskFrame():
         self.stop = False
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.model = LinkNet34()
-        self.model.load_state_dict(torch.load('linknet.pth', map_location='cpu'))
+        self.model.load_state_dict(torch.load('linknet.pth', map_location='cuda:0'))
         self.model.eval()
         self.model.to(self.device)
 

@@ -54,12 +54,12 @@ class ProcessRppg():
         if len(self.hrs) > 300: self.hrs.pop(0)
 
         self.hrs.append(hr)
-        if self.plot_pipe is not None and self.stop:
-            self.plot_pipe.send(None)
-        elif self.plot_pipe is not None:
-            self.plot_pipe.send([p, self.hrs])
-        else:
-            hr_fft = moving_avg(self.hrs, 3)[-1] if len(self.hrs) > 5 else self.hrs[-1]
+        # if self.plot_pipe is not None and self.stop:
+        #     self.plot_pipe.send(None)
+        # elif self.plot_pipe is not None:
+        #     self.plot_pipe.send([p, self.hrs])
+        # else:
+        #     hr_fft = moving_avg(self.hrs, 3)[-1] if len(self.hrs) > 5 else self.hrs[-1]
             # sys.stdout.write(f'\rHr: {round(hr_fft, 0)}')
             # sys.stdout.flush()
 
