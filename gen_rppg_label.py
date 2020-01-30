@@ -53,7 +53,6 @@ class RunPOSFromVideo():
         time2 = time.time()
         print(f'time {time2 - time1}')
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='rppg signal')
     parser.add_argument('--show_flg', default='true', type=bool, help='whether show the visualization result')
@@ -84,6 +83,7 @@ if __name__ == '__main__':
                 # task_list.append(task_processer)
                 task_processer.start()
                 task_processer.join()
+
 
     # for k in siw_datasets:
     #     sorted_dataset = sorted(siw_datasets[k], key = key_cmp)
