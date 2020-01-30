@@ -7,7 +7,10 @@ import multiprocessing as mp
 from plot_cont import DynamicPlot
 from capture_frames import CaptureFrames
 from process_mask import ProcessMasks
+from process_rppg import ProcessRppg
 
+import cv2
+from mask_frame import MaskFrame
 root_dir = '/data2/datasets_origin/'
 fft_save_dir = '/data2/datasets_origin/siw/train_fft/live'
 scan_dir = '/data2/datasets_origin/siw/Train/live'
@@ -59,42 +62,34 @@ if __name__ == '__main__':
     parser.add_argument('--paf_size', default=3, type=int, help='PAF feature kernel size')
     args = parser.parse_args()
 
-
     save_root_key = 'siw/train_fft/live'
 
     task_list = []
+    mask_frame = MaskFrame(args.batchsize)
+    count = 0
 
     for root, dirs, files in os.walk(scan_dir, topdown=False):
         for name in files:
-            # if len(task_list) >= 8:
-            #     for t in task_list:
-            #         t.start()
-            #     for t in task_list:
-            #         t.join()
-            #     task_list.clear()
-
             if name.split('.')[-1] == 'mov':
+                time_1 = time.time()
                 mov_path = os.path.join(root, name)
                 class_sess_name = name.split('.')[-2]
                 save_key = os.path.join(save_root_key, class_sess_name)
-                runPOSVid = RunPOSFromVideo(270, 25, 30, False)
-                task_processer = mp.Process(target=runPOSVid, args=(mov_path, save_key),
-                                            daemon=False)
-                # task_list.append(task_processer)
-                task_processer.start()
-                task_processer.join()
+                camera = cv2.VideoCapture(mov_path)
 
+                (grabbed, frame) = camera.read()
 
-    # for k in siw_datasets:
-    #     sorted_dataset = sorted(siw_datasets[k], key = key_cmp)
-    #     siw_datasets[k] = sorted_dataset
+                process_rppg = ProcessRppg(sz=270, fs=25, bs=30, save_key=save_key)
 
-    # runPOSImg = RunPOSFromImg(240, 25, 1, True)
-    #
-    # for k in siw_datasets:
-    #     tp, pe = k.split('_')
-    #     if tp != 'real':
-    #         continue
-    #     save_key = 'siw_v1/train_fft/'
-    #     save_key = save_key+'/'+tp+'/'
-    #     runPOSImg(siw_datasets[k], save_key)
+                while grabbed:
+                    (grabbed, orig) = camera.read()
+                    if not grabbed:
+                        break
+                    data = mask_frame.get_mask_frame(orig)
+                    process_rppg(data)
+                time_2 = time.time()
+
+                process_rppg.save_results()
+                count += 1
+                print("Finished {}, time:{}\n".format(count, (time_2-time_1)))
+
