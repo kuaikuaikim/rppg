@@ -28,12 +28,12 @@ class RunPOS():
         if self.plot:
             self.plot_pipe, plotter_pipe = mp.Pipe()
             self.plotter = DynamicPlot(self.signal_size, self.batch_size)
-            self.plot_process = mp.Process(target=self.plotter, args=(plotter_pipe,), daemon=False)
+            self.plot_process = mp.Process(target=self.plotter, args=(plotter_pipe,), daemon=True)
             self.plot_process.start()
         
         process_mask = ProcessMasks(self.signal_size, self.frame_rate, self.batch_size)
 
-        mask_processer = mp.Process(target=process_mask, args=(chil_process_pipe, self.plot_pipe, source, ), daemon=False)
+        mask_processer = mp.Process(target=process_mask, args=(chil_process_pipe, self.plot_pipe, source, ), daemon=True)
         mask_processer.start()
         
         capture = CaptureFrames(self.batch_size, source, show_mask=True)
@@ -61,6 +61,6 @@ if __name__=="__main__":
     args = get_args()
     source = args.source
     # runPOS = RunPOS(270, args.framerate, args.batchsize, True)
-    runPOS = RunPOS(240, args.framerate, args.batchsize, True)
+    runPOS = RunPOS(270, args.framerate, args.batchsize, True)
     runPOS(source)
     

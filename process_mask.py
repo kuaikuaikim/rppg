@@ -73,13 +73,13 @@ class ProcessMasks():
             self.plot_pipe.send([p, self.hrs])
         else:
             hr_fft = moving_avg(self.hrs, 3)[-1] if len(self.hrs) > 5 else self.hrs[-1]
-            sys.stdout.write(f'\rHr: {round(hr_fft, 0)}')
-            sys.stdout.flush()
+            # sys.stdout.write(f'\rHr: {round(hr_fft, 0)}')
+            # sys.stdout.flush()
     
     def extract_signal(self):
         signal_extracted = 0
         
-        while True and not self.stop:
+        while (True and not self.stop) or len(self.batch_mean) > 0:
             if len(self.batch_mean) == 0:
                 time.sleep(0.01)
                 continue
@@ -90,8 +90,10 @@ class ProcessMasks():
             if mean_dict['face_detected'] == False:
                 if self.plot_pipe is not None:
                     self.plot_pipe.send('no face detected')
+                print("no face\n")
                 continue
             if signal_extracted >= self.signal_size:
+                print("proc done\n")
                 self.process_signal(mean)
             else:
                 self.signal[signal_extracted: signal_extracted + mean.shape[0]] = mean
@@ -102,7 +104,7 @@ class ProcessMasks():
     def compute_mean(self):
         curr_batch_size = 0
         batch = None
-        while True and not self.stop:                
+        while (True and not self.stop) or len(self.masked_batches) > 0:
             if len(self.masked_batches) == 0:
                 time.sleep(0.01)
                 continue

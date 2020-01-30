@@ -35,6 +35,8 @@ class CaptureFrames():
         ])
     
         camera = cv2.VideoCapture(source)
+        frames_num = camera.get(7)
+        print("frame num:{}".format(frames_num))
         time.sleep(1)
         self.model.eval()
         (grabbed, frame) = camera.read()
@@ -44,7 +46,7 @@ class CaptureFrames():
         while grabbed:
             (grabbed, orig) = camera.read()
             if not grabbed:
-                continue
+                break
             
             shape = orig.shape[0:2]
             frame = cv2.cvtColor(orig, cv2.COLOR_BGR2RGB)
@@ -79,13 +81,14 @@ class CaptureFrames():
             
             if self.frames_count % 30 == 29:
                 time_2 = time.time()
-                sys.stdout.write(f'\rFPS: {30/(time_2-time_1)}')
-                sys.stdout.flush()
+                # sys.stdout.write(f'\rFPS: {30/(time_2-time_1)}')
+                print("\nFPS:{}".format(30/(time_2-time_1)))
+                # sys.stdout.flush()
                 time_1 = time.time()
 
 
             self.frames_count+=1
-
+        print("read frame count:{}".format(self.frames_count))
         self.terminate(camera)
 
     
