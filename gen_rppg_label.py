@@ -65,7 +65,7 @@ if __name__ == '__main__':
     save_root_key = 'siw/train_fft/live'
 
     task_list = []
-    mask_frame = MaskFrame(args.batchsize)
+    mask_frame = MaskFrame(30)
     count = 0
 
     for root, dirs, files in os.walk(scan_dir, topdown=False):
@@ -89,7 +89,7 @@ if __name__ == '__main__':
                     process_rppg(data)
                 time_2 = time.time()
 
-                process_rppg.save_results()
+                process_rppg.saveresults()
                 count += 1
                 print("Finished {}, time:{}\n".format(count, (time_2-time_1)))
 

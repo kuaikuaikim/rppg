@@ -75,7 +75,6 @@ class ProcessRppg():
                 self.plot_pipe.send('no face detected')
             return
         if self.signal_extracted >= self.signal_size:
-            print("proc done\n")
             self.process_signal(mean)
         else:
             self.signal[self.signal_extracted: self.signal_extracted + mean.shape[0]] = mean
