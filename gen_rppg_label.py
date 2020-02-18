@@ -89,7 +89,7 @@ if __name__ == '__main__':
                     process_rppg(data)
                 time_2 = time.time()
 
-                process_rppg.save_results()
+                process_rppg.saveresults()
                 count += 1
                 print("Finished {}, time:{}\n".format(count, (time_2-time_1)))
 

@@ -27,7 +27,7 @@ class ProcessRppg():
         self.hrs = []
         self.save_key = save_key
         self.save_root = '/data2/datasets_origin/'
-        self.save_results = True
+        self.save_result = True
         self.signal_extracted = 0
         self.curr_batch_size = 0
         self.batch = None
@@ -135,7 +135,7 @@ class ProcessRppg():
             np.save(fft_path, np.array(self.pulse.fft_spec))
 
     def savePlot(self, path):
-        if self.save_results == False:
+        if self.save_result == False:
             return
 
         # path = path.replace   ('/media/munawar/','/munawar-desktop/')
