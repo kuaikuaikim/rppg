@@ -22,8 +22,8 @@ class Pulse():
         self.fft_spec = []
         
     def get_pulse(self, mean_rgb):
-        seg_t = 3.2
-        # seg_t = 1.6
+        # seg_t = 3.2
+        seg_t = 1.1
         l = int(float(self.framerate) * seg_t)
         H = np.zeros(self.signal_size)
 
