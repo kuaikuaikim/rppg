@@ -71,8 +71,8 @@ class ProcessRppg():
         mean = mean_dict['mean']
 
         if mean_dict['face_detected'] == False:
-            if self.plot_pipe is not None:
-                self.plot_pipe.send('no face detected')
+            # if self.plot_pipe is not None:
+            #     self.plot_pipe.send('no face detected')
             return
         if self.signal_extracted >= self.signal_size:
             self.process_signal(mean)

@@ -71,10 +71,15 @@ if __name__ == '__main__':
     for root, dirs, files in os.walk(scan_dir, topdown=False):
         for name in files:
             if name.split('.')[-1] == 'mov':
+                print("{} start".format(name))
                 time_1 = time.time()
                 mov_path = os.path.join(root, name)
                 class_sess_name = name.split('.')[-2]
                 save_key = os.path.join(save_root_key, class_sess_name)
+
+                if os.path.exists(os.path.join("/data2/datasets_origin", save_key)):
+                    continue
+
                 camera = cv2.VideoCapture(mov_path)
 
                 (grabbed, frame) = camera.read()
@@ -90,6 +95,7 @@ if __name__ == '__main__':
                 time_2 = time.time()
 
                 process_rppg.saveresults()
+                print("{} end".format(name))
                 count += 1
                 print("Finished {}, time:{}\n".format(count, (time_2-time_1)))
 
